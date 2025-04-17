@@ -1,3 +1,5 @@
+package com.example;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,7 +11,7 @@ import java.util.Scanner;
 public class Main {
 
     /**
-     * Main method that can run in either single or multi-process mode.
+     * com.example.Main method that can run in either single or multi-process mode.
      *
      * @param args Command line arguments:
      * - No arguments: Run in single-process mode
@@ -25,33 +27,35 @@ public class Main {
         if (args.length > 0 && args[0].equals("multi")) {
             if (args.length > 1 && args[1].equals("initiator")) {
                 runMultiProcessInitiator();
-            } else {
+            } else if (args.length > 1 && args[1].equals("responder")) {
                 runMultiProcessResponder();
+            } else {
+                System.out.println("Invalid arguments. Use 'multi initiator' or 'multi responder'");
             }
         } else {
             runSingleProcess();
         }
+        scanner.close();
     }
 
 
     // Single process mode
     private static void runSingleProcess() {
-        Player p1 = new Player("Player1");
-        Player p2 = new Player("Player2");
-
+        Player p1 = new Player("initiator");
+        Player p2 = new Player("responder");
 
         for (int i = 0; i < MAX_MESSAGES; i++) {
-            // Get user input for message
-            System.out.print("Enter message for Player1 to send: ");
+            // Get user input
+            System.out.print("Enter message to send: ");
             String userMessage = scanner.nextLine();
 
-            // Player1 sends to Player2
-            p1.sendMessage(userMessage);
-            String received = p2.receiveMessage(userMessage + ":" + p1.getMessageCounter());
+            // initiator sends initial message
+            String p1Message = p1.sendMessage(userMessage);
+            p2.receiveMessage(p1Message);
 
-            // Player2 responds to Player1
-            p2.sendMessage(received);
-            p1.receiveMessage(received + ":" + p2.getMessageCounter());
+            // responder responds
+            String p2Message = p2.sendMessage(p1Message);
+            p1.receiveMessage(p2Message);
         }
     }
 
@@ -103,4 +107,4 @@ public class Main {
         }
     }
 }
-}
+
