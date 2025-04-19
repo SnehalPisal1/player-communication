@@ -4,7 +4,7 @@
 MAVEN_PATH="/c/Program Files/apache-maven-3.9.6/bin/mvn"
 
 # Build
-mvn clean package
+"$MAVEN_PATH" clean package
 
 # Run
 java -cp target/players-communication-1.0-SNAPSHOT.jar com.example.Main
